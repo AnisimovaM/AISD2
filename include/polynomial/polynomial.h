@@ -6,7 +6,7 @@ using namespace std;
 
 namespace Polynomial {
 	int random(int a, int b) {
-		std::random_device random_device;
+		std::random_device random_device; 
 		std::mt19937 generator(random_device()); 
 		
 		std::uniform_int_distribution<> distribution(a, b); 
@@ -97,7 +97,7 @@ namespace Polynomial {
 				_tail = newNode;
 			}
 			else {
-				newNode->prev = _tail;
+				newNode->prev = _tail; 
 				_tail->next = newNode;
 				_tail = newNode;
 			}
@@ -297,8 +297,78 @@ namespace Polynomial {
 			}
 			return;
 		}
-		
-		
+		void normal_form() {
+			Node* cur = _head;
+			int index = 0;
+			while (cur != nullptr) {
+				Node* cur2 = cur->next;
+				int index_2 = index + 1;
+				while (cur2 != nullptr) {
+					if (cur->pow == cur2->pow) {
+						cur->k += cur2->k;
+						cur2 = cur2->next;
+						pop(index_2);
+					}
+					else {
+						cur2 = cur2->next;
+						index_2++;
+					}
+				}
+				index_2 = 0;
+				cur = cur->next;
+				index++;
+			}
+			return;
+		}
+		void sort() {
+			if (_head == nullptr) {
+				return;
+			}
+			Node* cur = _head->next;
+			while (cur != nullptr) {
+				Node* tmp = cur;
+				int value = tmp->pow;
+				int value_k = tmp->k;
+				Node* prev = tmp->prev;
+
+				while (prev != nullptr && prev->pow < value) {
+					tmp->pow = prev->pow;
+					tmp->k = prev->k;
+					tmp = prev;
+					prev = prev->prev;
+				}
+				tmp->pow = value;
+				tmp->k = value_k;
+				cur = cur->next;
+			}
+		}
+		double value(double x) {
+			double sum = 0;
+			Node* cur = _head;
+			while (cur != nullptr) {
+				sum += cur->k * pow(x, cur->pow);
+				cur = cur->next;
+			}
+			return sum;
+		}
+		void print_n() {
+			Node* temp = _head;
+			while (temp != nullptr) {
+				if (temp->next == nullptr) {
+					cout << temp->k << "x^" << temp->pow;
+					return;
+				}
+				if (temp->next->k > 0) {
+					cout << temp->k << "x^" << temp->pow << "+";
+				}
+				if (temp->next->k < 0) {
+					cout << temp->k << "x^" << temp->pow;
+				}
+				temp = temp->next;
+			}
+			return;
+
+		}
 
 		Node& operator()(int index) const {
 			Node* cur = _head;

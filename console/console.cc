@@ -12,5 +12,7 @@ int main() {
 	cout << a << endl;
 	a.normal_form();
 	cout << a << endl;
-	
+	a.sort();
+	a.print_n();
+	cout << "=" << value(a.get_head(), 5);
 }
